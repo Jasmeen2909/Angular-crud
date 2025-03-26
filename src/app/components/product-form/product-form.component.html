@@ -1,0 +1,15 @@
+<h2>{{ product.id === 0 ? 'Create' : 'Edit' }} Product</h2>
+
+<div>
+    <label for="name">Name:</label>
+    <input [(ngModel)]="product.name" id="name"/>
+</div>
+
+<div>
+    <label for="price">Price:</label>
+    <input [(ngModel)]="product.price" id="price" type="number" />
+</div>
+
+<button (click)="saveProduct()">
+    {{ product.id === 0 ? 'Add' : 'Update' }} Product
+</button>
