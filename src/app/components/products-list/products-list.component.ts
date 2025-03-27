@@ -1,8 +1,12 @@
 import { Component,OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../models/product.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, RouterLink],
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
   styleUrl: './products-list.component.css'

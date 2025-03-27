@@ -1,4 +1,4 @@
-<h2>{{ product.id === 0 ? 'Create' : 'Edit' }} Product</h2>
+<h2>{{ isEditing() ? 'Edit' : 'Create' }} Product</h2>
 
 <div>
     <label for="name">Name:</label>
@@ -11,5 +11,5 @@
 </div>
 
 <button (click)="saveProduct()">
-    {{ product.id === 0 ? 'Add' : 'Update' }} Product
+    {{ isEditing() ? 'Update' : 'Add' }} Product
 </button>

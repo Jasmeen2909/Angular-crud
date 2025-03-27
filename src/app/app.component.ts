@@ -1,12 +1,21 @@
+// src/app/app.component.ts
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
 
 @Component({
+  standalone: true,
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  // We import RouterOutlet so that route components can be displayed,
+  // and RouterLink so we can use [routerLink] in a template if needed.
+  imports: [RouterOutlet, RouterLink],
+  template: `
+    <nav>
+      <a routerLink="/products">Product List</a>
+      <a routerLink="/product-form">Add Product</a>
+    </nav>
+    <hr />
+    <router-outlet></router-outlet>
+  `,
+  styles: []
 })
-export class AppComponent {
-  title = 'angular-project';
-}
+export class AppComponent {}
