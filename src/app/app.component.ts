@@ -9,11 +9,6 @@ import { RouterOutlet, RouterLink } from '@angular/router';
   // and RouterLink so we can use [routerLink] in a template if needed.
   imports: [RouterOutlet, RouterLink],
   template: `
-    <nav>
-      <a routerLink="/products">Product List</a>
-      <a routerLink="/product-form">Add Product</a>
-    </nav>
-    <hr />
     <router-outlet></router-outlet>
   `,
   styles: []
