@@ -5,7 +5,6 @@ import { Product } from '../models/product.model';
   providedIn: 'root'
 })
 export class ProductsService {
-  //A mock list of products
   private products: Product[] = [
     {id:1, name: 'laptop', price: 1000},
     {id:2, name: 'phone', price: 500}

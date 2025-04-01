@@ -10,15 +10,22 @@ import { AuthService } from './services/auth.service';
   imports: [CommonModule, RouterLink, RouterOutlet],
   template: `
   <nav>
-    <a routerLink="/products">Products</a>
-    <a routerLink="/product-form">New Product</a>
 
-    <button *ngIf="AuthService.isAuthenticated()" (click)="logout()">Logout</button>
+    <button *ngIf="authService.isAuthenticated()" (click)="logout()">Logout</button>
     </nav>
     <hr/>
     <router-outlet></router-outlet>
-
   `,
   styles: []
 })
-export class AppComponent {}
+export class AppComponent {
+  constructor(
+    public authService: AuthService,
+    private router: Router
+  ) {}
+
+  logout(): void{
+    this.authService.logout;
+    this.router.navigate(['/login']);
+  }
+}

@@ -1,5 +1,3 @@
-// src/app/components/login/login.component.ts
-
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -37,11 +35,11 @@ export class LoginComponent {
   onLogin() {
     const success = this.authService.login(this.username, this.password);
     if (success) {
-      // Navigate to a protected route
+
       this.errorMessage = '';
       this.router.navigate(['/products']);
     } else {
-      // Show an error
+ 
       this.errorMessage = 'Invalid username or password.';
     }
   }
