@@ -2,8 +2,11 @@
 <button routerLink="/product-form">Add New Product</button>
 <ul>
     <li *ngFor="let product of products">
-        {{ product.name }} ({{ product.price }}$)
-        <button (click)="deleteProduct(product.id)">Delete</button>
-        <button [routerLink]="['/product-form', product.id]">Edit</button>
-    </li>
+        <div>
+          <img *ngIf="product.imageUrl" [src]="product.imageUrl" width="80" />
+          {{ product.name }} - ${{ product.price }}
+        </div>
+      </li>
+      
 </ul>
+  

@@ -1,15 +1,38 @@
 <h2>{{ isEditing() ? 'Edit' : 'Create' }} Product</h2>
 
-<div>
-    <label for="name">Name:</label>
-    <input [(ngModel)]="product.name" id="name"/>
-</div>
+<form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div>
+        <label for="name">Name:</label>
+        <input id="name" formControlName="name"/>
 
-<div>
-    <label for="price">Price:</label>
-    <input [(ngModel)]="product.price" id="price" type="number" />
-</div>
+        <div *ngIf="productForm.get('name')?.invalid && productForm.get('name')?.touched" style="color: red;">
+            Name is required (min length 3).
+        </div>
+    </div>
 
-<button (click)="saveProduct()">
-    {{ isEditing() ? 'Update' : 'Add' }} Product
-</button>
+    <div>
+        <label for="price">Price:</label>
+        <input id="price" type="number" formControlName="price"/>
+        <div *ngIf="productForm.get('price')?.invalid && productForm.get('price')?.touched" style="color: red;">
+            Price must be at least 1.
+        </div>
+    </div>
+
+    <div>
+        <label>Product Image</label>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" />
+      </div>
+    
+      <!-- Optional Preview -->
+      <div *ngIf="previewData">
+        <h4>Preview:</h4>
+        <img [src]="previewData" alt="Preview" width="150"/>
+      </div>
+    
+      <button type="submit" [disabled]="productForm.invalid">
+        {{ isEditing() ? 'Update' : 'Add' }} Product
+      </button>
+</form>
+  
+    
+  

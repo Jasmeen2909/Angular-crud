@@ -1,53 +1,97 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { ProductsService } from '../../services/products.service';
 import { Product } from '../../models/product.model';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.css'
+  styleUrls: ['./product-form.component.css']
 })
-export class ProductFormComponent implements OnInit{
-  product: Product = {id: 0, name: '', price: 0};
+export class ProductFormComponent implements OnInit {
+  productForm!: FormGroup;
+
+  previewData: string | null = null;
+
+  productId: number | null = null;
 
   constructor(
-    private productsService: ProductsService, 
-    private route: ActivatedRoute,
-    private router: Router
+    private productsService: ProductsService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
-      const id = +idParam;
-      const existing = this.productsService.getProductById(id);
-      if (existing) {
-        this.product = {...existing};
+      this.productId = +idParam;
+    }
+
+    this.productForm = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      price: new FormControl(1, [Validators.required, Validators.min(1)])
+    });
+
+    if (this.productId) {
+      const existingProduct = this.productsService.getProductById(this.productId);
+      if (existingProduct) {
+        this.productForm.patchValue({
+          name: existingProduct.name,
+          price: existingProduct.price
+        });
       }
     }
   }
 
-  isEditing(): boolean{
-    return this.product.id !==0;
+  isEditing(): boolean {
+    return !!this.productId;
   }
 
-  saveProduct(): void {
-    if(!this.isEditing()) {
-      //create
-      this.product.id = new Date().getTime();
-      this.productsService.createProduct(this.product);
-    } else {
-      //update
-      this.productsService.updateProduct(this.product);
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+
+        this.previewData = reader.result as string;
+      };
+      reader.readAsDataURL(file);
     }
-
-    //redirect back to product list
-    this.router.navigate(['/products']);
   }
 
+  onSubmit(): void {
+    console.log('onSubmit triggered');
+    if (this.productForm.valid) {
+      const formValue = this.productForm.value;
+
+      if (!this.isEditing()) {
+        // create
+        const newId = new Date().getTime();
+        const newProduct: Product = {
+          id: newId,
+          name: formValue.name,
+          price: formValue.price,
+          imageUrl: this.previewData
+        };
+        this.productsService.createProduct(newProduct);
+      } else {
+        // update
+        const updatedProduct: Product = {
+          id: this.productId!,
+          name: formValue.name,
+          price: formValue.price,
+          imageUrl: this.previewData
+        };
+        this.productsService.updateProduct(updatedProduct);
+      }
+
+      // go back to the product list
+      this.router.navigate(['/products']);
+    }
+  }
 }
