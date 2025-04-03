@@ -10,7 +10,9 @@ export class ProductsService {
     {id:2, name: 'phone', price: 500}
   ];
 
-  constructor() { }
+  constructor() { 
+    this.loadFromStorage();
+  }
 
   getProducts(): Product[] {
     return this.products;
@@ -20,18 +22,32 @@ export class ProductsService {
     return this.products.find(p => p.id === id);
   }
 
-  createProduct(product: Product): void {
+  createProduct(product: Product) {
     this.products.push(product);
+    this.saveToStorage();
   }
 
-  updateProduct (updatedProduct: Product): void {
+  updateProduct (updatedProduct: Product) {
     const index = this.products.findIndex(p => p.id === updatedProduct.id);
-    if (index > -1) {
+    if (index !== -1) {
       this.products[index] = updatedProduct;
+      this.saveToStorage();
     }
   }
 
-  deleteProduct(id: number): void {
+  deleteProduct(id: number) {
     this.products = this.products.filter(p => p.id !== id);
+    this.saveToStorage();
+  }
+
+  private loadFromStorage(){
+    const storedData = localStorage.getItem('products');
+    if(storedData) {
+      this.products = JSON.parse(storedData);
+    }
+  }
+
+  private saveToStorage(){
+    localStorage.setItem('products', JSON.stringify(this.products));
   }
 }
